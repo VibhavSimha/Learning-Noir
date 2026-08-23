@@ -53,6 +53,7 @@ This command generates a `Prover.toml` file that hosts input values to be used w
 ```toml
 x = 1
 y = 2
+z = 1
 ```
 
 ### Then compile and execute your Noir program:
