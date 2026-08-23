@@ -8,13 +8,23 @@ Install the required Barretenberg version:
 bbup -v 5.1.0
 ````
 
+Install Nargo by running this in your terminal:
+
+```
+curl -L https://raw.githubusercontent.com/noir-lang/noirup/refs/heads/main/install | bash
+noirup
+```
+
+
+This installs noirup, the installation script, and runs it to install the latest version of Nargo.
+
 Verify that you are using the required Noir version:
 
 ```bash
 nargo --version
 ```
 
-Expected version:
+Expected minimum version:
 
 ```text
 nargo version = 1.0.0-beta.26

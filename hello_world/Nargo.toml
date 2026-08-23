@@ -1,6 +1,6 @@
 [package]
 name = "hello_world"
 type = "bin"
-authors = [""]
+authors = ["Vibhav S"]
 
 [dependencies]

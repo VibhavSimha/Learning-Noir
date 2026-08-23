@@ -21,6 +21,9 @@ tooling/noir_js/lib
 # fuzzing inputs (generated from 'test_programs')
 tooling/nargo_fuzz_target/draft_inputs
 
+# witness files
+**/Prover.toml
+
 # Nargo output
 *.proof
 *.acir
