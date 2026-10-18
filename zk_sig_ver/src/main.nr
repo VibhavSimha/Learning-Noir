@@ -6,10 +6,12 @@ fn main(
     signature :[u8; 64],
     hashed_message : pub [u8; 32],
     expected_address: Field
-) {
+) -> pub Field{
     let address: Field = ecrecover::ecrecover(pub_key_x, pub_key_y, signature, hashed_message);
-
+    println("Address is:");
+    println(address);
     assert(address == expected_address, "Address did not match");
+    address
 }
 
 // #[test]
