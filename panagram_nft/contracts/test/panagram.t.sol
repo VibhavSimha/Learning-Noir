@@ -11,8 +11,10 @@ contract PanagramTest is Test {
     address user = makeAddr("user");
     address user2 = makeAddr("user2");
     uint256 constant FIELD_MODULUS = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
-    bytes32 ANSWER = bytes32(uint256(keccak256("deadbeef")) % FIELD_MODULUS);
-    bytes32 newAnswer = bytes32(uint256(keccak256("newAnswer")) % FIELD_MODULUS);
+    bytes32 ANSWER = bytes32(uint256(keccak256(abi.encode(bytes32(uint256(keccak256("deadbeef")) % FIELD_MODULUS)))) % FIELD_MODULUS);
+    bytes32 ANSWERguess = bytes32(uint256(keccak256("deadbeef")) % FIELD_MODULUS);
+    bytes32 newAnswer =  bytes32(uint256(keccak256(abi.encode(bytes32(uint256(keccak256("newAnswer")) % FIELD_MODULUS)))) % FIELD_MODULUS);
+    bytes32 newAnswerGuess = bytes32(uint256(keccak256("newAnswer")) % FIELD_MODULUS);
     
     // deploy the verifier
     // deploy the panagram contract
@@ -45,7 +47,7 @@ contract PanagramTest is Test {
     // 1. Test someone recieves NFT 0 if they guess correctly first
     function testCorrectGuessPasses() public {
         vm.prank(user);
-        bytes memory userProof = _getProof(ANSWER, ANSWER, user);
+        bytes memory userProof = _getProof(ANSWERguess, ANSWER, user);
         panagram.makeGuess(userProof);
         vm.assertEq(panagram.balanceOf(user, 0), 1);
         vm.assertEq(panagram.balanceOf(user, 1), 0);
@@ -56,32 +58,32 @@ contract PanagramTest is Test {
 
         vm.prank(user);
         vm.expectRevert();
-        panagram.makeGuess(_getProof(ANSWER, ANSWER, user));
+        panagram.makeGuess(_getProof(ANSWERguess, ANSWER, user));
     }
     // 2. Test someone recieves NFT 1 if they guess correctly second
     function testCorrectGuessSecondPasses() public {
         vm.prank(user);
-        panagram.makeGuess(_getProof(ANSWER, ANSWER, user));
+        panagram.makeGuess(_getProof(ANSWERguess, ANSWER, user));
         vm.prank(user2);
-        panagram.makeGuess(_getProof(ANSWER, ANSWER, user2));
+        panagram.makeGuess(_getProof(ANSWERguess, ANSWER, user2));
         vm.assertEq(panagram.balanceOf(user, 0), 1);
         vm.assertEq(panagram.balanceOf(user2, 0), 0);
         vm.assertEq(panagram.balanceOf(user2, 1), 1);
         vm.prank(user2);
         vm.expectRevert();
-        panagram.makeGuess(_getProof(ANSWER, ANSWER, user2));
+        panagram.makeGuess(_getProof(ANSWERguess, ANSWER, user2));
     }
     // 3. Test we can start a new round
     function testNewRound() public {
         vm.prank(user);
-        panagram.makeGuess(_getProof(ANSWER, ANSWER, user));
+        panagram.makeGuess(_getProof(ANSWERguess, ANSWER, user));
         vm.warp(panagram.MIN_DURATION() + 1);
         panagram.newRound(newAnswer);
         vm.assertEq(panagram.s_currentRound(), 2);
         vm.assertEq(panagram.s_currentRoundWinner(), address(0));
         vm.assertEq(panagram.s_answer(), newAnswer);
         vm.prank(user2);
-        panagram.makeGuess(_getProof(newAnswer, newAnswer, user2));
+        panagram.makeGuess(_getProof(newAnswerGuess, newAnswer, user2));
         vm.assertEq(panagram.balanceOf(user2, 0), 1);
     }
 
@@ -89,6 +91,6 @@ contract PanagramTest is Test {
     function testIncorrectGuessReverts() public {
         vm.prank(user);
         vm.expectRevert();
-        panagram.makeGuess(_getProof(bytes32(uint256(keccak256("wrong")) % FIELD_MODULUS), bytes32(uint256(keccak256("wrong")) % FIELD_MODULUS), user));
+        panagram.makeGuess(_getProof(bytes32(uint256(keccak256("wrong")) % FIELD_MODULUS), bytes32(uint256(keccak256(abi.encode(bytes32(uint256(keccak256("wrong")) % FIELD_MODULUS)))) % FIELD_MODULUS), user));
     }
 }
