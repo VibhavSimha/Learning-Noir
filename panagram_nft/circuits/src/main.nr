@@ -1,4 +1,4 @@
-fn main(guessHash: Field, answerHash: pub Field) {
+fn main(guessHash: Field, answerHash: pub Field, address: pub Field) {
     assert(guessHash == answerHash);
 }
 
@@ -6,7 +6,7 @@ fn main(guessHash: Field, answerHash: pub Field) {
 
 #[test]
 fn test_main() {
-    main(1, 2);
+    main(1, 2, 6);
 
     // Uncomment to make test fail
     // main(1, 1);

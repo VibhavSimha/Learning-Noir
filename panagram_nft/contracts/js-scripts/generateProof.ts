@@ -46,7 +46,8 @@ export default async function generateProof() {
             // guessHash: sha256ToField(guessHash),
             guessHash: guessHash,
             // answerHash: sha256ToField(answerHash)
-            answerHash: answerHash
+            answerHash: answerHash,
+            address: process.argv[4]
         };
         const api = await Barretenberg.new();
         const backend = new UltraHonkBackend(bytecode, api);
